@@ -13,21 +13,14 @@ import { AuthService } from '../../core/auth/auth.service';
   standalone: true,
   selector: 'app-login',
   imports: [FormsModule, ReactiveFormsModule],
-  template: `
-    <h1>Connexion</h1>
-
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <input formControlName="email" placeholder="Email" />
-      <input formControlName="password" placeholder="Mot de passe" type="password" />
-      <button type="submit">Se connecter</button>
-    </form>
-  `,
+  templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit {
   form!: FormGroup;
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
-    console.log('in login');
-  }
+  loading: boolean = false;
+  errorMessage: string = '';
+
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     console.log('in login');
@@ -38,12 +31,22 @@ export class LoginComponent implements OnInit {
   }
 
   submit() {
-    if (this.form.invalid) return;
+    if (this.form.invalid || this.loading) return;
+
+    this.loading = true;
+    this.errorMessage = '';
 
     const { email, password } = this.form.value;
 
-    this.auth.login(email!, password!).subscribe(() => {
-      this.router.navigate(['/dashboard']);
+    this.auth.login(email!, password!).subscribe({
+      next: () => {
+        this.loading = false;
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        this.loading = false;
+        this.errorMessage = 'Email ou mot de passe incorrect.';
+      },
     });
   }
 }

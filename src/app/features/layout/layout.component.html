@@ -1,0 +1,148 @@
+<div class="flex min-h-screen bg-surface-muted">
+
+  <!-- ====== SIDEBAR DESKTOP (md et +) ====== -->
+  <aside class="hidden md:flex md:flex-col bg-brand-900 text-white transition-all duration-200"
+    [class.w-64]="!sidebarCollapsed" [class.w-16]="sidebarCollapsed">
+    <!-- Logo -->
+    <div class="flex items-center gap-2 px-4 py-4 border-b border-white/10">
+      <div class="h-8 w-8 rounded-full bg-brand-600 flex items-center justify-center text-xs font-bold">
+        CL
+      </div>
+      @if (!sidebarCollapsed) {
+      <div class="flex flex-col">
+        <!-- TODO: Mettre plutot un logo -->
+        <span class="text-sm font-semibold leading-tight">CRM Light</span>
+        <!-- TODO: Entité réglage pour avoir le nom de l'entrepris -->
+        <span class="text-[11px] text-brand-200">Webmate Services</span>
+      </div>
+      }
+    </div>
+
+    <!-- Nav -->
+    <!-- TODO: Mettre des vrais icones -->
+    <nav class="mt-4 flex-1 space-y-1 px-2">
+      <a routerLink="/users" routerLinkActive="bg-brand-700"
+        class="flex items-center gap-2 py-2 px-2 rounded-lg text-sm hover:bg-brand-700 transition">
+        <span>👤</span>
+        @if (!sidebarCollapsed) { <span>Utilisateurs</span> }
+      </a>
+
+      <a routerLink="/customers" routerLinkActive="bg-brand-700"
+        class="flex items-center gap-2 py-2 px-2 rounded-lg text-sm hover:bg-brand-700 transition">
+        <span>👥</span>
+        @if (!sidebarCollapsed) { <span>Clients</span> }
+      </a>
+
+      <a routerLink="/opportunities" routerLinkActive="bg-brand-700"
+        class="flex items-center gap-2 py-2 px-2 rounded-lg text-sm hover:bg-brand-700 transition">
+        <span>📈</span>
+        @if (!sidebarCollapsed) { <span>Opportunités</span> }
+      </a>
+    </nav>
+
+    <!-- Footer sidebar -->
+    <div class="px-3 py-3 text-[11px] text-brand-200 border-t border-white/10">
+      @if (!sidebarCollapsed) {
+      <div>Connecté en tant que</div>
+      <div class="font-medium text-white truncate">{{ userEmail }}</div>
+      } @else {
+      <span class="block text-center">●</span>
+      }
+    </div>
+  </aside>
+
+  <!-- ====== SIDEBAR MOBILE (overlay, < md) ====== -->
+  @if (mobileSidebarOpen) {
+  <div class="fixed inset-0 z-40 flex md:hidden">
+    <!-- backdrop -->
+    <div class="flex-1 bg-black/40" (click)="closeMobileSidebar()"></div>
+
+    <!-- panneau -->
+    <aside class="w-64 bg-brand-900 text-white flex flex-col">
+      <div class="flex items-center justify-between px-4 py-4 border-b border-white/10">
+        <div class="flex items-center gap-2">
+          <div class="h-8 w-8 rounded-full bg-brand-600 flex items-center justify-center text-xs font-bold">
+            CL
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-semibold leading-tight">CRM Light</span>
+            <span class="text-[11px] text-brand-200">Webmate Services</span>
+          </div>
+        </div>
+        <button class="text-brand-200 hover:text-white" (click)="closeMobileSidebar()">
+          ✕
+        </button>
+      </div>
+
+      <nav class="mt-4 flex-1 space-y-1 px-2">
+        <a routerLink="/users" routerLinkActive="bg-brand-700"
+          class="flex items-center gap-2 py-2 px-2 rounded-lg text-sm hover:bg-brand-700 transition"
+          (click)="closeMobileSidebar()">
+          <span>👤</span>
+          <span>Utilisateurs</span>
+        </a>
+
+        <a routerLink="/customers" routerLinkActive="bg-brand-700"
+          class="flex items-center gap-2 py-2 px-2 rounded-lg text-sm hover:bg-brand-700 transition"
+          (click)="closeMobileSidebar()">
+          <span>👥</span>
+          <span>Clients</span>
+        </a>
+
+        <a routerLink="/opportunities" routerLinkActive="bg-brand-700"
+          class="flex items-center gap-2 py-2 px-2 rounded-lg text-sm hover:bg-brand-700 transition"
+          (click)="closeMobileSidebar()">
+          <span>📈</span>
+          <span>Opportunités</span>
+        </a>
+      </nav>
+
+      <div class="px-3 py-3 text-[11px] text-brand-200 border-t border-white/10">
+        <div>Connecté en tant que</div>
+        <div class="font-medium text-white truncate">{{ userEmail }}</div>
+      </div>
+    </aside>
+  </div>
+  }
+
+  <!-- ====== MAIN AREA ====== -->
+  <div class="flex flex-col flex-1">
+
+    <!-- Header -->
+    <header class="h-14 bg-white border-b flex items-center justify-between px-4 shadow-sm">
+      <div class="flex items-center gap-2">
+        <!-- Bouton mobile (md:hidden) -->
+        <button class="p-2 rounded-lg bg-surface-muted hover:bg-surface transition md:hidden"
+          (click)="openMobileSidebar()" aria-label="Ouvrir le menu">
+          ☰
+        </button>
+
+        <!-- Bouton desktop (hidden md:inline-flex) -->
+        <button class="p-2 rounded-lg bg-surface-muted hover:bg-surface transition hidden md:inline-flex"
+          (click)="toggleDesktopSidebar()" aria-label="Réduire la sidebar">
+          ☰
+        </button>
+
+        <span class="text-sm text-gray-500">
+          <!-- TODO: Mettre plutot le titre du module -->
+          Dashboard
+        </span>
+      </div>
+      <!-- Todo: Faire un menu avec un rond, l'initial de l'utilisateur avec un menu au survol : Réglage du compte, déconnexion etc -->
+      <div class="flex items-center gap-3">
+        <span class="hidden sm:inline text-sm text-gray-600">
+          {{ userEmail }}
+        </span>
+        <button class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-sm rounded-lg transition"
+          (click)="logout()">
+          Déconnexion
+        </button>
+      </div>
+    </header>
+
+    <!-- Contenu -->
+    <main class="p-4 sm:p-6">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
