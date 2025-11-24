@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   standalone: true,
   selector: 'app-dashboard',
   imports: [],
-  template: ` <p>Hello</p> `,
+  template: ` <h1 class="text-3xl font-bold underline">Hello world!</h1> `,
 })
 export class DashboardComponent {}

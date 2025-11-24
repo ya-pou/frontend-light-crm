@@ -1,16 +1,15 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { Inject, Injectable, signal } from '@angular/core';
 import { tap } from 'rxjs';
+import { APP_CONFIG_TOKEN, AppConfig } from '../config/app-config.token';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private API_URL = 'http://localhost:3000/auth';
-
   currentUser = signal<any | null>(null);
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, @Inject(APP_CONFIG_TOKEN) private config: AppConfig) {
     this.loadUserFromStorage();
   }
 
@@ -27,7 +26,7 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    return this.http.post<any>(`${this.API_URL}/login`, { email, password }).pipe(
+    return this.http.post<any>(`${this.config.apiBaseUrl}/auth/login`, { email, password }).pipe(
       tap((res) => {
         console.log(res);
         localStorage.setItem('token', res.access_token);
