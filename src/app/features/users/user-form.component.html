@@ -1,0 +1,142 @@
+<div class="max-w-3xl mx-auto space-y-6">
+
+  <!-- Title -->
+  <div>
+    @if (mode() === 'create') {
+    <h1 class="text-2xl font-semibold">Créer un utilisateur</h1>
+    <p class="text-gray-500 text-sm">Renseignez les informations du nouvel utilisateur.</p>
+    }
+    @else if (mode() === 'edit') {
+    <h1 class="text-2xl font-semibold">Modifier l’utilisateur</h1>
+    <p class="text-gray-500 text-sm">Mettre à jour les informations de {{ user()?.name }}.</p>
+    }
+    @else {
+    <h1 class="text-2xl font-semibold">Utilisateur</h1>
+    <p class="text-gray-500 text-sm">Informations de {{ user()?.name }}.</p>
+    }
+  </div>
+
+  @if (loading()) {
+  <div class="text-gray-500">Chargement...</div>
+  }
+
+  @if (error()) {
+  <div class="text-red-500">{{ error() }}</div>
+  }
+
+  @if (!loading()) {
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+
+    <!-- Nom -->
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div>
+        <label class="text-sm font-medium">Prénom</label>
+        <input type="text" formControlName="name" class="w-full mt-1 px-3 py-2 border rounded-lg" />
+      </div>
+
+      <div>
+        <label class="text-sm font-medium">Nom</label>
+        <input type="text" formControlName="lastName" class="w-full mt-1 px-3 py-2 border rounded-lg" />
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div>
+      <label class="text-sm font-medium">Email</label>
+      <input type="email" formControlName="email" class="w-full mt-1 px-3 py-2 border rounded-lg" />
+    </div>
+
+    @if (mode() === 'create') {
+
+    <div>
+      <label class="text-sm font-medium">Mot de passe</label>
+
+      <input type="password" formControlName="password"
+        class="w-full mt-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500"
+        placeholder="Définir un mot de passe" />
+
+      <!-- @if (f.password.invalid && fb.password.touched) {
+      <p class="text-red-600 text-xs mt-1">
+        Le mot de passe est obligatoire.
+      </p>
+      } -->
+    </div>
+
+    }
+
+    @if(currentUser.profil === 'ADMIN') {
+    <!-- Role -->
+    <div>
+      <label class="text-sm font-medium">Rôle</label>
+      <select formControlName="profil" class="w-full mt-1 px-3 py-2 border rounded-lg">
+        <option value="ADMIN">Admin</option>
+        <option value="MANAGER">Manager</option>
+        <option value="USER">Utilisateur</option>
+      </select>
+    </div>
+    } @else {
+    <label class="text-sm font-medium">Rôle</label>
+    <input type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-gray-100"
+      value="{{ roleLabel(user()?.profil || null) }}" disabled />
+    }
+
+    <!-- Sélection du manager -->
+    @if(form.value.profil === 'USER') {
+    @switch (currentUser.profil) {
+
+    @case ('ADMIN') {
+    <!-- ADMIN : peut assigner n'importe quel manager -->
+    <div>
+      <label class="text-sm font-medium">Manager</label>
+
+      @if (loadingManagers()) {
+      <div class="mt-1 text-sm text-gray-500">Chargement…</div>
+      } @else {
+      <select formControlName="managerId"
+        class="w-full mt-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500">
+        <option [value]="null">Aucun manager</option>
+
+        @for (m of managers(); track m.id) {
+        <option [value]="m.id">
+          {{ m.name }} {{ m.lastName }}
+        </option>
+        }
+      </select>
+      }
+    </div>
+    }
+    @default {
+    <!-- USER | MANAGER : lecture seule -->
+    <div>
+      <label class="text-sm font-medium">Manager</label>
+      <input type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-gray-100"
+        value="{{ user()?.manager?.name }} {{ user()?.manager?.lastName }}" disabled />
+    </div>
+    }
+    }
+    }
+
+    <!-- Actif -->
+    <div class="flex items-center gap-3">
+      <input type="checkbox" formControlName="actif" />
+      <label class="text-sm">Utilisateur actif</label>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-end gap-2 pt-4">
+
+      <button type="button" class="px-4 py-2 rounded-lg border" (click)="onCancel()">
+        Annuler
+      </button>
+
+      @if (mode() !== 'view') {
+      <button type="submit" class="px-4 py-2 rounded-lg bg-brand-600 text-white hover:bg-brand-700 transition">
+        Enregistrer
+      </button>
+      }
+    </div>
+
+  </form>
+  }
+</div>

@@ -1,5 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { UserListItem, UserRole, UsersService } from '../../core/api/users.service';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -15,7 +16,7 @@ export class UsersComponent implements OnInit {
 
   readonly UserRole = UserRole;
 
-  constructor(private userService: UsersService) {}
+  constructor(private userService: UsersService, private router: Router) {}
 
   ngOnInit() {
     this.loadUsers();
@@ -56,10 +57,14 @@ export class UsersComponent implements OnInit {
     }
   }
 
+  onNewUserClick() {
+    this.router.navigate([`users`, `new`]);
+  }
+
   // placeholder pour le futur CRUD admin
-  onEdit(user: UserListItem) {
-    console.log('Edit user', user);
-    // TODO: route vers /users/:id/edit ou ouverture d’un drawer
+  onEdit(userId: number) {
+    console.log(userId);
+    this.router.navigate([`users`, `${userId.toString()}`]);
   }
 
   onDelete(user: UserListItem) {

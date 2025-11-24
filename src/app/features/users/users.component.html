@@ -15,7 +15,8 @@
         placeholder="Rechercher par nom ou email…" [value]="search()" (input)='search.set($event.target.value)' />
 
       <button
-        class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-brand-600 text-white hover:bg-brand-700 transition">
+        class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-brand-600 text-white hover:bg-brand-700 transition"
+        (click)="onNewUserClick()">
         + Nouvel utilisateur
       </button>
     </div>
@@ -63,7 +64,7 @@
             </td>
           </tr>
           } @else {
-          @for (user of filteredUsers; track user.id) {
+          @for (user of filteredUsers; track $index) {
           <tr class="bg-white hover:bg-surface-muted transition">
             <!-- Utilisateur -->
             <td class="px-4 py-3">
@@ -117,7 +118,7 @@
             <!-- Actions -->
             <td class="px-4 py-3 text-right text-sm">
               <div class="inline-flex items-center gap-1">
-                <button class="px-2 py-1 rounded-md text-xs text-gray-600 hover:bg-gray-100" (click)="onEdit(user)">
+                <button class="px-2 py-1 rounded-md text-xs text-gray-600 hover:bg-gray-100" (click)="onEdit(user.id)">
                   Modifier
                 </button>
                 <button class="px-2 py-1 rounded-md text-xs text-red-600 hover:bg-red-50" (click)="onDelete(user)">
@@ -139,7 +140,7 @@
         Aucun utilisateur ne correspond à votre recherche.
       </div>
       } @else {
-      @for (user of filteredUsers; track user.id) {
+      @for (user of filteredUsers; track $index) {
       <div class="p-4 flex items-start justify-between">
         <div class="flex gap-3">
           <div
@@ -170,7 +171,7 @@
           </div>
         </div>
         <div class="flex flex-col gap-1 text-right">
-          <button class="text-xs text-gray-600 hover:underline" (click)="onEdit(user)">
+          <button class="text-xs text-gray-600 hover:underline" (click)="onEdit(user.id)">
             Modifier
           </button>
           <button class="text-xs text-red-600 hover:underline" (click)="onDelete(user)">

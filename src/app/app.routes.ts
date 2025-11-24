@@ -21,6 +21,16 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/users/users.component').then((c) => c.UsersComponent),
       },
+      {
+        path: 'users/new',
+        loadComponent: () =>
+          import('./features/users/user-form.component').then((m) => m.UserFormComponent),
+      },
+      {
+        path: 'users/:id',
+        loadComponent: () =>
+          import('./features/users/user-form.component').then((m) => m.UserFormComponent),
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },

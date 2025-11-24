@@ -21,7 +21,6 @@ export interface UserListItem {
     lastName: string;
   } | null;
   email: string;
-  telephone?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -34,5 +33,21 @@ export class UsersService {
 
   findAll(): Observable<UserListItem[]> {
     return this.httpClient.get<UserListItem[]>(this.baseUrl);
+  }
+
+  findOne(id: number): Observable<UserListItem> {
+    return this.httpClient.get<UserListItem>(`${this.baseUrl}/${id}`);
+  }
+
+  update(id: number, payload: any): Observable<UserListItem> {
+    return this.httpClient.patch<UserListItem>(`${this.baseUrl}/${id}`, payload);
+  }
+
+  create(payload: any): Observable<UserListItem> {
+    return this.httpClient.post<UserListItem>(this.baseUrl, payload);
+  }
+
+  findManagers() {
+    return this.httpClient.get<UserListItem[]>(`${this.baseUrl}?profil=manager`);
   }
 }
