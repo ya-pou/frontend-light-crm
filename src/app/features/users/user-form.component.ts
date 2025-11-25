@@ -48,7 +48,6 @@ export class UserFormComponent implements OnInit {
   private detectMode() {
     const { path } = this.route.snapshot.routeConfig!;
     const id = this.route.snapshot.paramMap.get('id');
-    console.log(path);
     if (path === 'users/new') {
       this.mode.set('create');
       return;
@@ -124,8 +123,6 @@ export class UserFormComponent implements OnInit {
     }
 
     // MANAGER → peut modifier uniquement ses users
-    console.log(current.profil === UserRole.MANAGER);
-
     if (current.profil === UserRole.MANAGER && user.manager?.id === current.sub) {
       this.mode.set('edit');
       return;

@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UserListItem, UserRole } from '../../core/api/users.service';
+import { UserRole } from '../../core/api/users.service';
 import { CustomerListItem, CustomersService } from '../../core/api/customers.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
@@ -47,7 +47,6 @@ export class CustomerFormComponent implements OnInit {
   private detectMode() {
     const { path } = this.route.snapshot.routeConfig!;
     const id = this.route.snapshot.paramMap.get('id');
-    console.log(path);
     if (path === 'customers/new') {
       this.mode.set('create');
       return;
@@ -75,7 +74,6 @@ export class CustomerFormComponent implements OnInit {
     }
 
     // MANAGER → peut modifier uniquement ses clients et les clients de ses utilisateurs
-    console.log(current.profil === UserRole.MANAGER);
 
     if (current.profil === UserRole.MANAGER && customer.user?.id === current.sub) {
       this.mode.set('edit');
@@ -112,7 +110,6 @@ export class CustomerFormComponent implements OnInit {
       },
       error: (error) => {
         this.loading.set(false);
-        console.log(error);
       },
     });
   }
@@ -122,22 +119,18 @@ export class CustomerFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.form.invalid);
     if (this.form.invalid) return;
 
     if (this.mode() === 'create') {
       this.customerService.create(this.form.value).subscribe({
         next: () => this.router.navigate(['/customers']),
-        error: (error) => {
-          console.log(error);
-        },
+        error: (error) => {},
       });
     }
 
     if (this.mode() === 'edit') {
       this.customerService.update(this.customerId()!, this.form.value).subscribe({
         next: () => this.router.navigate(['/customers']),
-        error: (error) => console.log(error),
       });
     }
   }

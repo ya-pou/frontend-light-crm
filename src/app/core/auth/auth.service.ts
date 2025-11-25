@@ -28,7 +28,6 @@ export class AuthService {
   login(email: string, password: string) {
     return this.http.post<any>(`${this.config.apiBaseUrl}/auth/login`, { email, password }).pipe(
       tap((res) => {
-        console.log(res);
         localStorage.setItem('token', res.access_token);
 
         const payload = JSON.parse(atob(res.access_token.split('.')[1]));

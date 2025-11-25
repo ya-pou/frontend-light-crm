@@ -68,7 +68,6 @@ export class CustomersComponent {
         },
         error: (error) => {
           this.loading.set(false);
-          console.log(error);
         },
       });
   }
@@ -83,7 +82,6 @@ export class CustomersComponent {
   }
 
   openClient(event: any) {
-    console.log(event);
     this.router.navigate(['customers', event.id]);
   }
 

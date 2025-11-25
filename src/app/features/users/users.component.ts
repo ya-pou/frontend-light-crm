@@ -117,7 +117,6 @@ export class UsersComponent implements OnInit {
   }
 
   openUser(event: any) {
-    console.log(event);
     this.router.navigate(['users', event.id]);
   }
 
@@ -126,7 +125,6 @@ export class UsersComponent implements OnInit {
   }
 
   onDelete(user: UserListItem) {
-    console.log('Delete user', user);
     // on branchera plus tard avec un confirm + appel API
   }
 }
