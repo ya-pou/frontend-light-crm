@@ -7,12 +7,16 @@
   </div>
   }
 
+  <input type="text"
+    class="w-full sm:w-64 my-2 mr-1 px-3 float-right py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+    placeholder="Rechercher..." (input)='onSearch($event.target.value)' />
+
   <table class="min-w-full border-separate border-spacing-0 text-sm">
     <thead class="bg-gray-50">
       <tr>
-        @for (col of columns; track $index) {
+        @for (col of columns; track col.key) {
         <th class="px-4 py-3 text-left font-semibold text-gray-600 uppercase text-xs whitespace-nowrap cursor-pointer"
-          [style.width]="col.width" (click)="onSort(col)">
+          [style.width]="col.width" (click)="onSort(col.key)">
           <div class="flex items-center gap-1">
             {{ col.label }}
             @if (col.sortable) {
@@ -58,4 +62,42 @@
       }
     </tbody>
   </table>
+  <div class="mt-4 flex items-center justify-between text-sm">
+    <div class="flex items-center gap-2 text-sm text-gray-600">
+      <label for="limit">Résultats par page :</label>
+
+      <select id="limit" class="border border-gray-300 rounded px-2 py-1 bg-white" [value]="query.limit"
+        (change)="onLimitChange($event)">
+        @for(l of query.limits; track $index) {
+        <option [value]="l">
+          {{ l }}
+        </option>
+        }
+      </select>
+    </div>
+
+
+    <div class="flex items-center justify-between py-3">
+      <div class="text-sm text-gray-600">
+        Page <span class="font-medium">{{ query.page }}</span>
+        |
+        <span class="text-gray-500">{{ pageInfo }}</span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+
+      <!-- Prev -->
+      <button class="px-3 py-1 border rounded disabled:opacity-40" [disabled]="query.page <= 1"
+        (click)="onPageChange(query.page - 1)">
+        Précédent
+      </button>
+
+      <!-- Next -->
+      <button class="px-3 py-1 border rounded disabled:opacity-40" [disabled]="query.page >= query.totalPages"
+        (click)="onPageChange(query.page + 1)">
+        Suivant
+      </button>
+    </div>
+  </div>
 </div>

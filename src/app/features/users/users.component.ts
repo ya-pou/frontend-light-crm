@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import {
   DataTable,
   DataTableColumn,
+  DataTableQuery,
 } from '../../shared/components/data-table/data-table.component';
 
 @Component({
@@ -16,7 +17,18 @@ export class UsersComponent implements OnInit {
   users = signal<UserListItem[]>([]);
   loading = signal(false);
   error = signal<string | null>(null);
-  search = signal<string>('');
+  query = signal<DataTableQuery>({
+    page: 1,
+    limit: 10,
+    search: '',
+    col: 'id',
+    dir: 'asc',
+    totalPages: 1,
+    limits: [10, 25, 50],
+    total: 0,
+  });
+
+  // search = signal<string>('');
   columns: DataTableColumn<UserListItem>[] = [
     { key: 'id', label: 'ID', width: '50px', sortable: true },
     { key: 'name', label: 'Prénom', sortable: true },
@@ -41,10 +53,10 @@ export class UsersComponent implements OnInit {
       key: '',
     },
   ];
-  page = signal(1);
-  totalPages = signal<number>(0);
-  limit = signal(2);
-  total = signal(0);
+  // page = signal(1);
+  // totalPages = signal<number>(0);
+  // limit = signal(2);
+  // total = signal(0);
   sortState = signal<{ column: string | undefined; dir: 'asc' | 'desc' }>({
     column: 'id',
     dir: 'asc',
@@ -63,43 +75,43 @@ export class UsersComponent implements OnInit {
 
     this.userService
       .getUsers({
-        page: this.page(),
-        limit: this.limit(),
-        search: this.search(),
-        sort: this.sortState().column,
-        dir: this.sortState().dir,
+        page: this.query().page,
+        limit: this.query().limit,
+        search: this.query().search,
+        sort: this.query().col,
+        dir: this.query().dir,
       })
       .subscribe({
         next: (res: any) => {
           this.users.set(res.data);
-          this.total.set(res.meta.total);
-          this.totalPages.set(res.meta.totalPages);
+          this.query.set({ ...this.query(), total: res.meta.total });
+          this.query.set({ ...this.query(), totalPages: res.meta.totalPages });
           this.loading.set(false);
         },
         error: () => this.loading.set(false),
       });
   }
 
-  onSearch(term: string) {
-    this.search.set(term);
-    this.page.set(1); // reset page
-    this.loadUsers();
-  }
+  // onSearch(term: string) {
+  //   this.search.set(term);
+  //   this.page.set(1); // reset page
+  //   this.loadUsers();
+  // }
 
-  onSort(column: string) {
-    // toggle asc/desc
-    var dir: 'asc' | 'desc' = 'asc';
-    if (column === this.sortState().column) {
-      dir = this.sortState().dir === 'asc' ? 'desc' : 'asc';
-    }
-    this.sortState.set({ column, dir });
-    this.loadUsers();
-  }
+  // onSort(column: string) {
+  //   // toggle asc/desc
+  //   var dir: 'asc' | 'desc' = 'asc';
+  //   if (column === this.sortState().column) {
+  //     dir = this.sortState().dir === 'asc' ? 'desc' : 'asc';
+  //   }
+  //   this.sortState.set({ column, dir });
+  //   this.loadUsers();
+  // }
 
-  setPage(p: number) {
-    this.page.set(p);
-    this.loadUsers();
-  }
+  // setPage(p: number) {
+  //   this.page.set(p);
+  //   this.loadUsers();
+  // }
 
   roleLabel(role: UserRole): string {
     switch (role) {
@@ -122,6 +134,17 @@ export class UsersComponent implements OnInit {
       default:
         return 'bg-gray-100 text-gray-700 border border-gray-200';
     }
+  }
+
+  // onLimitChange(newLimit: number) {
+  //   this.limit.set(newLimit);
+  //   this.page.set(1); // reset page
+  //   this.loadUsers(); // reload API
+  // }
+
+  updateQuery(newQuery: DataTableQuery) {
+    this.query.set(newQuery);
+    this.loadUsers();
   }
 
   onNewUserClick() {

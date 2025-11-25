@@ -10,10 +10,6 @@
     </div>
 
     <div class="flex flex-col sm:flex-row gap-2 sm:items-center">
-      <input type="text"
-        class="w-full sm:w-64 px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-        placeholder="Rechercher par nom ou email…" [value]="search()" (input)='onSearch($event.target.value)' />
-
       <button
         class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-brand-600 text-white hover:bg-brand-700 transition"
         (click)="onNewUserClick()">
@@ -23,27 +19,6 @@
   </div>
 
   <!-- Card table -->
-  <app-data-table [columns]="columns" [rows]="users()" [loading]="loading()" (sort)="onSort($event)"
-    (rowClick)="openUser($event)"></app-data-table>
-
-  <div class="mt-4 flex items-center justify-between text-sm">
-
-    <div class="text-gray-600">
-      Page {{ page() }} sur {{ totalPages() }}
-    </div>
-
-    <div class="flex items-center gap-2">
-
-      <!-- Prev -->
-      <button class="px-3 py-1 border rounded disabled:opacity-40" [disabled]="page() <= 1"
-        (click)="setPage(page() - 1)">
-        Précédent
-      </button>
-
-      <!-- Next -->
-      <button class="px-3 py-1 border rounded disabled:opacity-40" [disabled]="page() >= totalPages()"
-        (click)="setPage(page() + 1)">
-        Suivant
-      </button>
-    </div>
-  </div>
+  <app-data-table [columns]="columns" [rows]="users()" [loading]="loading()" [query]="query()"
+    (queryChange)="updateQuery($event)" (rowClick)="openUser($event)"></app-data-table>
+</div>
