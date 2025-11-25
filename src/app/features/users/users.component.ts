@@ -41,7 +41,11 @@ export class UsersComponent implements OnInit {
       key: '',
     },
   ];
-  sortState = signal<{ column: string | null; dir: 'asc' | 'desc' }>({
+  page = signal(1);
+  totalPages = signal<number>(0);
+  limit = signal(2);
+  total = signal(0);
+  sortState = signal<{ column: string | undefined; dir: 'asc' | 'desc' }>({
     column: 'id',
     dir: 'asc',
   });
@@ -57,24 +61,44 @@ export class UsersComponent implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    this.userService.findAll().subscribe({
-      next: (data) => {
-        this.users.set(data);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.error.set('Impossible de charger les utilisateurs');
-        this.loading.set(false);
-      },
-    });
+    this.userService
+      .getUsers({
+        page: this.page(),
+        limit: this.limit(),
+        search: this.search(),
+        sort: this.sortState().column,
+        dir: this.sortState().dir,
+      })
+      .subscribe({
+        next: (res: any) => {
+          this.users.set(res.data);
+          this.total.set(res.meta.total);
+          this.totalPages.set(res.meta.totalPages);
+          this.loading.set(false);
+        },
+        error: () => this.loading.set(false),
+      });
   }
 
-  get filteredUsers(): UserListItem[] {
-    const term = this.search().toLowerCase().trim();
-    if (!term) return this.users();
-    return this.users().filter((u) =>
-      `${u.name} ${u.lastName} ${u.email}`.toLowerCase().includes(term)
-    );
+  onSearch(term: string) {
+    this.search.set(term);
+    this.page.set(1); // reset page
+    this.loadUsers();
+  }
+
+  onSort(column: string) {
+    // toggle asc/desc
+    var dir: 'asc' | 'desc' = 'asc';
+    if (column === this.sortState().column) {
+      dir = this.sortState().dir === 'asc' ? 'desc' : 'asc';
+    }
+    this.sortState.set({ column, dir });
+    this.loadUsers();
+  }
+
+  setPage(p: number) {
+    this.page.set(p);
+    this.loadUsers();
   }
 
   roleLabel(role: UserRole): string {
@@ -109,39 +133,7 @@ export class UsersComponent implements OnInit {
     this.router.navigate(['users', event.id]);
   }
 
-  onSort(column: any) {
-    const current = this.sortState();
-
-    const newDir: 'asc' | 'desc' =
-      current.column === column && current.dir === 'asc' ? 'desc' : 'asc';
-
-    this.sortState.set({ column, dir: newDir });
-
-    // tri en mémoire sur items()
-    const sorted = [...this.users()].sort((a: any, b: any) => {
-      const va = a[column];
-      const vb = b[column];
-
-      if (va == null && vb == null) return 0;
-      if (va == null) return -1;
-      if (vb == null) return 1;
-
-      if (typeof va === 'string' && typeof vb === 'string') {
-        return va.localeCompare(vb);
-      }
-      return va > vb ? 1 : va < vb ? -1 : 0;
-    });
-
-    if (newDir === 'desc') {
-      sorted.reverse();
-    }
-
-    this.users.set(sorted);
-  }
-
-  // placeholder pour le futur CRUD admin
   onEdit(userId: number) {
-    console.log(userId);
     this.router.navigate([`users`, `${userId.toString()}`]);
   }
 

@@ -31,8 +31,14 @@ export class UsersService {
     this.baseUrl = `${this.config.apiBaseUrl}/users`;
   }
 
-  findAll(): Observable<UserListItem[]> {
-    return this.httpClient.get<UserListItem[]>(this.baseUrl);
+  getUsers(params: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    sort?: string;
+    dir?: string;
+  }): Observable<any> {
+    return this.httpClient.get<any>(`${this.baseUrl}`, { params });
   }
 
   findOne(id: number): Observable<UserListItem> {
