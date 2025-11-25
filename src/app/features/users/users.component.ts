@@ -52,10 +52,7 @@ export class UsersComponent implements OnInit {
       key: '',
     },
   ];
-  // sortState = signal<{ column: string | undefined; dir: 'asc' | 'desc' }>({
-  //   column: 'id',
-  //   dir: 'asc',
-  // });
+
   readonly UserRole = UserRole;
 
   constructor(private userService: UsersService, private router: Router) {}
@@ -87,27 +84,6 @@ export class UsersComponent implements OnInit {
       });
   }
 
-  // onSearch(term: string) {
-  //   this.search.set(term);
-  //   this.page.set(1); // reset page
-  //   this.loadUsers();
-  // }
-
-  // onSort(column: string) {
-  //   // toggle asc/desc
-  //   var dir: 'asc' | 'desc' = 'asc';
-  //   if (column === this.sortState().column) {
-  //     dir = this.sortState().dir === 'asc' ? 'desc' : 'asc';
-  //   }
-  //   this.sortState.set({ column, dir });
-  //   this.loadUsers();
-  // }
-
-  // setPage(p: number) {
-  //   this.page.set(p);
-  //   this.loadUsers();
-  // }
-
   roleLabel(role: UserRole): string {
     switch (role) {
       case UserRole.ADMIN:
@@ -130,12 +106,6 @@ export class UsersComponent implements OnInit {
         return 'bg-gray-100 text-gray-700 border border-gray-200';
     }
   }
-
-  // onLimitChange(newLimit: number) {
-  //   this.limit.set(newLimit);
-  //   this.page.set(1); // reset page
-  //   this.loadUsers(); // reload API
-  // }
 
   updateQuery(newQuery: DataTableQuery) {
     this.query.set(newQuery);
