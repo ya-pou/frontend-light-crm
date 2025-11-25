@@ -1,59 +1,133 @@
-# CrmLight
+# ⚡ Light CRM — Frontend (Angular)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.9.
+Interface utilisateur du projet **Light CRM**, développée avec **Angular** (Signals) & **TailwindCSS**.  
+Conçu pour être **ultra-rapide**, **scalable**, et **agréable à utiliser**.
 
-## Development server
+---
 
-To start a local development server, run:
+## ✨ Features
+
+- 🔐 **Auth JWT** (Login + route guards)
+- 👤 **User Management** (CRUD complet, accès selon rôle)
+- 🧲 **Customer Management**
+- 📦 **Tableaux** :
+  - Recherche serveur
+  - Tri serveur
+  - Pagination serveur
+  - Sélecteur du nombre de résultats
+- 🎨 **UI 100% Tailwind**, responsive & moderne
+- ⚙️ Architecture **signals-first**
+- 🌐 Environnements `.env`
+- 🧩 Composants réutilisables (DataTable, Layout…)
+
+---
+
+## 🧰 Stack
+
+- **Angular 20**
+- **Signals**
+- **TailwindCSS**
+- **TypeScript**
+- **RxJS**
+
+---
+
+## 🚀 Installation
+
+### 1. Clone
+```bash
+git clone https://github.com/ya-pou/frontend-light-crm
+cd frontend-light-crm
+```
+### 2. Install
+```
+npm install
+```
+### 3. Environments
+
+Créer :  
+src/environments/environment.ts :
 
 ```bash
-ng serve
+export const environment = {
+  production: false,
+  apiBaseUrl: 'http://localhost:3000'
+};
 ```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Et :  
+src/environments/environment.prod.ts :
 
 ```bash
-ng generate component component-name
+export const environment = {
+  production: true,
+  apiBaseUrl: 'https://api.monsupercrm.com'
+};
 ```
+---
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 🏁 Run
 
 ```bash
-ng generate --help
+npm start
 ```
 
-## Building
+- ▶️ App : http://localhost:4200  
+- 📡 API attendue sur : http://localhost:3000  
 
-To build the project run:
+---
 
-```bash
-ng build
-```
+## 🔐 Auth
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- Login → stockage du JWT  
+- Interceptor HTTP → ajout automatique du token  
+- Guards → routes protégées  
+- Signals → state ultra-léger et réactif  
 
-## Running unit tests
+---
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## 🧩 Composants clés
 
-```bash
-ng test
-```
+### 🔹 DataTable (shared/components/data-table)
 
-## Running end-to-end tests
+- Search  
+- Sort  
+- Pagination  
+- Limit  
+- Responsive  
 
-For end-to-end (e2e) testing, run:
+### 🔹 Layout
 
-```bash
-ng e2e
-```
+- Navbar + Sidebar  
+- Mobile-ready  
+- Tailwind styling  
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## 🛠 Scripts
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+| Commande       | Description             |
+|----------------|-------------------------|
+| npm start      | Dev server              |
+| npm run build  | Build prod              |
+| npm run lint   | Vérifier le code        |
+
+---
+
+## 🔗 Backend associé
+
+API NestJS :  
+👉 https://github.com/ya-pou/api-light-crm
+
+---
+
+## 📝 Licence
+
+Projet personnel / démonstration.  
+Libre pour un usage interne ou éducatif.
+
+---
+
+## 🤝 Auteur
+
+Développé par **Alexis HAAG**  
+https://webmate-services.com
