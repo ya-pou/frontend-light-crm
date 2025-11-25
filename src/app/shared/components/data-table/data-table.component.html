@@ -1,0 +1,61 @@
+<div class="w-full overflow-x-auto relative">
+
+  <!-- Overlay de chargement -->
+  @if (loading) {
+  <div class="absolute inset-0 flex items-center justify-center bg-white/60 z-10">
+    <div class="text-gray-600 text-sm">Chargement…</div>
+  </div>
+  }
+
+  <table class="min-w-full border-separate border-spacing-0 text-sm">
+    <thead class="bg-gray-50">
+      <tr>
+        @for (col of columns; track $index) {
+        <th class="px-4 py-3 text-left font-semibold text-gray-600 uppercase text-xs whitespace-nowrap cursor-pointer"
+          [style.width]="col.width" (click)="onSort(col)">
+          <div class="flex items-center gap-1">
+            {{ col.label }}
+            @if (col.sortable) {
+            <span class="text-gray-400 text-xs">↕</span>
+            }
+          </div>
+        </th>
+        }
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (row of rows; track $index) {
+      <tr class="border-b hover:bg-gray-50 cursor-pointer" (click)="rowClick.emit(row)">
+        @for (col of columns; track $index) {
+        <td class="px-4 py-3 whitespace-nowrap" [attr.data-label]="col.label">
+
+          @let val = getCellValue(row, col);
+
+          <!-- Si format retourne un objet (ex: badge) -->
+          @if (val?.type === 'badge') {
+          <span class="px-2 py-1 text-xs rounded-full font-medium border" [ngClass]="val.theme">
+            {{ val.text }}
+          </span>
+          }
+
+          <!-- Si format retourne un string simple -->
+          @else {
+          {{ val }}
+          }
+
+        </td>
+        }
+      </tr>
+      }
+
+      @if (!rows.length && !loading) {
+      <tr>
+        <td [attr.colspan]="columns.length" class="px-4 py-6 text-center text-gray-400">
+          Aucun résultat.
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -8,7 +8,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "src/app/shared/components/data-table/data-table.componentts"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]

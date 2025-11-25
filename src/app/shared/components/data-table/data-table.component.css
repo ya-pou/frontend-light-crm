@@ -1,0 +1,27 @@
+@media (max-width: 640px) {
+
+  thead {
+    display: none;
+  }
+
+  tbody tr {
+    display: block;
+    border: 1px solid #eee;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    padding: 0.75rem;
+  }
+
+  td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+  }
+
+  td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #666;
+    padding-right: 1rem;
+  }
+}
