@@ -36,7 +36,21 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/customers/customers.component').then((c) => c.CustomersComponent),
       },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: 'customers/new',
+        loadComponent: () =>
+          import('./features/customers/customer-form.component').then(
+            (c) => c.CustomerFormComponent
+          ),
+      },
+      {
+        path: 'customers/:id',
+        loadComponent: () =>
+          import('./features/customers/customer-form.component').then(
+            (c) => c.CustomerFormComponent
+          ),
+      },
+      { path: '', redirectTo: '', pathMatch: 'full' },
     ],
   },
 

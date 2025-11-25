@@ -1,0 +1,88 @@
+<div class="max-w-3xl mx-auto space-y-6">
+  <div>
+    <!-- Title -->
+    @if (mode() === 'create') {
+    <h1 class="text-2xl font-semibold">Créer un client</h1>
+    <p class="text-gray-500 text-sm">Renseignez les informations du nouveau client.</p>
+    }
+    @else if (mode() === 'edit') {
+    <h1 class="text-2xl font-semibold">Modifier le client</h1>
+    <p class="text-gray-500 text-sm">Mettre à jour les informations de {{ `${customer()?.lastName} ${customer()?.name}`
+      }}</p>
+    }
+    @else {
+    <h1 class="text-2xl font-semibold">Client</h1>
+    <p class="text-gray-500 text-sm">Informations de {{ `${customer()?.lastName} ${customer()?.name}`}}.</p>
+    }
+  </div>
+
+  @if (loading()) {
+  <div class="text-gray-500">Chargement...</div>
+  }
+
+  @if (error()) {
+  <div class="text-red-500">{{ error() }}</div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+    <!-- Nom -->
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div>
+        <label class="text-sm font-medium">Prénom</label>
+        <input type="text" formControlName="name" class="w-full mt-1 px-3 py-2 border rounded-lg" />
+      </div>
+
+      <div>
+        <label class="text-sm font-medium">Nom</label>
+        <input type="text" formControlName="lastName" class="w-full mt-1 px-3 py-2 border rounded-lg" />
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div>
+      <label class="text-sm font-medium">Email</label>
+      <input type="email" formControlName="email" class="w-full mt-1 px-3 py-2 border rounded-lg" />
+    </div>
+
+    <div>
+      <label class="text-sm font-medium">Téléphone</label>
+      <input type="tel" formControlName="telephone" class="w-full mt-1 px-3 py-2 border rounded-lg" />
+    </div>
+
+    <div>
+      <label class="text-sm font-medium">Secteur</label>
+      <input type="text" formControlName="sector" class="w-full mt-1 px-3 py-2 border rounded-lg" />
+    </div>
+
+    <div>
+      <label for="text-sm font-medium">Statut</label>
+      <select formControlName="status" class="w-full mt-1 px-3 py-2 border rounded-lg">
+        <option value="active">Actif</option>
+        <option value="inactive">Inactif</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="userId">Responsable</label>
+      <select id="userId" formControlName="userId" class="w-full mt-1 px-3 py-2 border rounded-lg">
+        <option [value]="null">Aucun utilisateur</option>
+        @for(u of users(); track u.id) {
+        <option [value]="u.id">{{`${u.lastName} ${u.name}`}}</option>
+        }
+      </select>
+    </div>
+    <!-- Buttons -->
+    <div class="flex justify-end gap-2 pt-4">
+
+      <button type="button" class="px-4 py-2 rounded-lg border" (click)="onCancel()">
+        Annuler
+      </button>
+
+      @if (mode() !== 'view') {
+      <button type="submit" class="px-4 py-2 rounded-lg bg-brand-600 text-white hover:bg-brand-700 transition">
+        Enregistrer
+      </button>
+      }
+    </div>
+  </form>
+</div>
