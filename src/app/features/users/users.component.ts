@@ -28,7 +28,6 @@ export class UsersComponent implements OnInit {
     total: 0,
   });
 
-  // search = signal<string>('');
   columns: DataTableColumn<UserListItem>[] = [
     { key: 'id', label: 'ID', width: '50px', sortable: true },
     { key: 'name', label: 'Prénom', sortable: true },
@@ -53,14 +52,10 @@ export class UsersComponent implements OnInit {
       key: '',
     },
   ];
-  // page = signal(1);
-  // totalPages = signal<number>(0);
-  // limit = signal(2);
-  // total = signal(0);
-  sortState = signal<{ column: string | undefined; dir: 'asc' | 'desc' }>({
-    column: 'id',
-    dir: 'asc',
-  });
+  // sortState = signal<{ column: string | undefined; dir: 'asc' | 'desc' }>({
+  //   column: 'id',
+  //   dir: 'asc',
+  // });
   readonly UserRole = UserRole;
 
   constructor(private userService: UsersService, private router: Router) {}

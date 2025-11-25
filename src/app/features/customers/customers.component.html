@@ -1,0 +1,24 @@
+<div class="space-y-4">
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div>
+      <h1 class="text-2xl font-semibold text-gray-900">Clients</h1>
+      <p class="text-sm text-gray-500">
+        Gestion des clients. Vue actuelle : <span class="font-medium">Administrateur</span>.
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-2 sm:items-center">
+      <button
+        class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-brand-600 text-white hover:bg-brand-700 transition"
+        (click)="onNewClientClick()">
+        + Nouveau Client
+      </button>
+    </div>
+  </div>
+
+  <!-- Card table -->
+  <app-data-table [columns]="columns" [rows]="customers()" [loading]="loading()" [query]="query()"
+    (queryChange)="updateQuery($event)" (rowClick)="openClient($event)"></app-data-table>
+
+</div>
