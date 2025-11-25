@@ -17,10 +17,14 @@
         @for (col of columns; track col.key) {
         <th class="px-4 py-3 text-left font-semibold text-gray-600 uppercase text-xs whitespace-nowrap cursor-pointer"
           [style.width]="col.width" (click)="onSort(col.key)">
-          <div class="flex items-center gap-1">
+          <div class="flex w-full justify-between items-center justify-betweengap-1 select-none">
             {{ col.label }}
-            @if (col.sortable) {
-            <span class="text-gray-400 text-xs">↕</span>
+            @if (col.sortable && (query.col === col.key && query.dir === 'desc')) {
+            <lucide-icon [ngClass]="[(query.col === col.key) ? 'text-brand-900': 'text-gray-400 ']" [img]="AArrowUp"
+              [size]="15" class="text-xs"></lucide-icon>
+            } @else {
+            <lucide-icon [ngClass]="[(query.col === col.key) ? 'text-brand-900': 'text-gray-400 ']" [img]="AArrowDown"
+              [size]="15" class="text-xs"></lucide-icon>
             }
           </div>
         </th>
@@ -79,7 +83,8 @@
 
     <div class="flex items-center justify-between py-3">
       <div class="text-sm text-gray-600">
-        Page <span class="font-medium">{{ query.page }}</span>
+        Page <span class="font-medium">{{ query.page }}</span> sur <span class="font-medium">{{ query.totalPages
+          }}</span>
         |
         <span class="text-gray-500">{{ pageInfo }}</span>
       </div>

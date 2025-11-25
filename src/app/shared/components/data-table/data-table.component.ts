@@ -1,5 +1,7 @@
 import { NgClass } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AArrowDown, LucideAngularModule } from 'lucide-angular';
+import { AArrowUp } from 'lucide-angular/src/icons';
 
 export interface DataTableColumn<T> {
   key: string;
@@ -25,11 +27,15 @@ export interface DataTableQuery {
 @Component({
   selector: 'app-data-table',
   standalone: true,
-  imports: [NgClass],
+  imports: [NgClass, LucideAngularModule],
   templateUrl: './data-table.component.html',
   styleUrl: './data-table.component.css',
 })
 export class DataTable<T> {
+  // Icons
+  readonly AArrowDown = AArrowDown;
+  readonly AArrowUp = AArrowUp;
+
   @Input() rows: T[] = [];
   @Input() columns: DataTableColumn<T>[] = [];
   @Input() loading = false;
